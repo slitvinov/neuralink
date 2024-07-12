@@ -1,9 +1,6 @@
-#!/usr/bin/env python
-
 import struct
 import sys
 import array
-import collections
 
 WAVE_FORMAT_PCM = 0x0001
 def unpack(fmt, stream):
@@ -39,8 +36,3 @@ def read(path):
         assert 4 + 24 + (8 + M * nChannels * Ns) == cksize0
         a = array.array("h", f.read())
         return a
-
-a = read("data/006c6dd6-d91e-419c-9836-c3f320da4f25.wav")
-a = read(sys.argv[1])
-for i, x in enumerate(a):
-    print(i, x)
