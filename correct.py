@@ -7,6 +7,7 @@ import mwave
 
 a = mwave.read(sys.argv[1])
 m, shift = max((sum((x + i) % 64 == 0 for x in a), i) for i in range(64))
+sys.stderr.write("shift: %d\n" % shift)
 for i, x in enumerate(a):
     x += shift
     if x % 64 != 0:
@@ -16,4 +17,4 @@ for i, x in enumerate(a):
             y = y0
     else:
         y = x
-    print(i, x - shift, y - shift, x - y)
+    print(i, x - shift, y - shift, x - y, y // 64)
