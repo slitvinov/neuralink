@@ -37,18 +37,10 @@ def read(path):
         assert nAvgBytesPerSec == nSamplesPerSec * M * nChannels
         assert nBlockAlign == M * nChannels
         assert 4 + 24 + (8 + M * nChannels * Ns) == cksize0
-        a = array.array("H", f.read())
-        assert len(a) == Ns
+        a = array.array("h", f.read())
         return a
 
-# a = read("data/006c6dd6-d91e-419c-9836-c3f320da4f25.wav")
+a = read("data/006c6dd6-d91e-419c-9836-c3f320da4f25.wav")
 a = read(sys.argv[1])
-# c = collections.Counter(a)
-# print(len(c))
-# exit(0)
-p = None
 for i, x in enumerate(a):
-    if p == None or abs(x - p) > 10000:
-        print("")
     print(i, x)
-    p = x
