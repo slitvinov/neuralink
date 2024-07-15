@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# rm -rf data
-# unzip data.zip
-
 get_file_size() {
   find "$1" -printf "%s\n"
 }
@@ -14,10 +11,8 @@ total_size_compressed=$((encoder_size + decoder_size))
 
 for file in data/*
 do
-  echo "Processing $file"
   compressed_file_path="${file}.brainwire"
   decompressed_file_path="${file}.copy"
-  exit
 
   ./encode "$file" "$compressed_file_path"
   ./decode "$compressed_file_path" "$decompressed_file_path"
@@ -25,9 +20,7 @@ do
   file_size=$(get_file_size "$file")
   compressed_size=$(get_file_size "$compressed_file_path")
 
-  if diff -q "$file" "$decompressed_file_path" > /dev/null; then
-      echo "${file} losslessly compressed from ${file_size} bytes to ${compressed_size} bytes"
-  else
+  if ! cmp "$file" "$decompressed_file_path" > /dev/null; then
       echo "ERROR: ${file} and ${decompressed_file_path} are different."
       exit 1
   fi

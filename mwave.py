@@ -37,7 +37,7 @@ def read_safe(path):
         assert nAvgBytesPerSec == nSamplesPerSec * M * nChannels
         assert nBlockAlign == M * nChannels
         assert 4 + 24 + (8 + M * nChannels * Ns) == cksize0
-        a = array.array("<h", f.read())
+        a = array.array("h", f.read())
         assert len(a) == Ns
         assert a.itemsize == M
         return a
@@ -47,3 +47,25 @@ def read(path):
     with open(path, "rb") as f:
         f.seek(44)
         return array.array("h", f.read())
+
+
+def write(data, path):
+    with open(path, "wb") as f:
+        data = memoryview(data)
+        assert data.contiguous
+        M = 2
+        nChannels = 1
+        Ns = data.nbytes // M
+        cksize0 = 4 + 24 + (8 + M * nChannels * Ns)
+        cksize1 = 16
+        nSamplesPerSec = 19531
+        nAvgBytesPerSec = M * nSamplesPerSec * nChannels
+        nBlockAlign = M * nChannels
+        wBitsPerSample = 16
+        cksize = Ns * nChannels * M
+        b = struct.pack("<4sI4s4sIHHIIHH4sI", b"RIFF", cksize0, b"WAVE",
+                        b"fmt ", cksize1, WAVE_FORMAT_PCM, nChannels,
+                        nSamplesPerSec, nAvgBytesPerSec, nBlockAlign,
+                        wBitsPerSample, b"data", cksize)
+        f.write(b)
+        f.write(data)
