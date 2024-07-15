@@ -21,14 +21,16 @@ def min_max(fmt):
     return minx, maxx
 
 u, v = min_max("<h")
-p, q = -512, 512
+p, q = -511, 512
 s = set()
 for path in sys.argv[1:]:
     a = mwave.read(path)
     s.update(a)
 D = { }
 for x in sorted(s):
-    a = (x - u) * (q - p) // (v - u) + p
+    a = (x - u) * (q - p) / (v - u) + p
+    a = int(round(a))
     if a in D:
         print(x, D[a], a)
     D[a] = x
+    print(a, x)
