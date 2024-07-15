@@ -37,7 +37,7 @@ def read_safe(path):
         assert nAvgBytesPerSec == nSamplesPerSec * M * nChannels
         assert nBlockAlign == M * nChannels
         assert 4 + 24 + (8 + M * nChannels * Ns) == cksize0
-        a = array.array("h", f.read())
+        a = array.array("<h", f.read())
         assert len(a) == Ns
         assert a.itemsize == M
         return a
