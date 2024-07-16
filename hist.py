@@ -30,7 +30,12 @@ D = { }
 for x in sorted(s):
     a = (x - u) * (q - p) / (v - u) + p
     a = int(round(a))
+    b = (a - p) * (v - u) / (q - p) + u
+    b = int(b)
     if a in D:
         print(x, D[a], a)
+        exit(1)
+    if x != b:
+        print(x, b)
     D[a] = x
-    print(a, x)
+#     print(a, x)
