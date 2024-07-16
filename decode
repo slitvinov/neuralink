@@ -2,7 +2,26 @@
 
 import sys
 import mwave
+import itertools
+import numpy as np
+
+
+def batched(iterable, n):
+    if n < 1:
+        raise ValueError('n must be at least one')
+    it = iter(iterable)
+    while (batch := tuple(itertools.islice(it, n))):
+        yield batch
+
 
 with open(sys.argv[1], "rb") as f:
     a = f.read()
-mwave.write(a, sys.argv[2])
+a = np.frombuffer(a, dtype="uint8")
+a = np.unpackbits(a)
+for x in batched(a, 10):
+    x = "".join(str(x) for x in x)
+    y = int(x, 2)
+    if x[0] == "1":
+        y -= 512
+        print(y)
+# mwave.write(a, sys.argv[2])

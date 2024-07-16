@@ -2,7 +2,23 @@
 
 import sys
 import mwave
+import numpy as np
+
+
+def bin10(x):
+    ans = []
+    for i in range(10):
+        ans.append(x & 1)
+        x >>= 1
+    assert x == 0
+    return list(reversed(ans))
+
 
 a = mwave.read(sys.argv[1])
+a = mwave.encode(a)
+b = []
+for x in a:
+    x += 512
+    b.extend(bin10(x))
 with open(sys.argv[2], "wb") as f:
-    f.write(a)
+    f.write(b)

@@ -69,3 +69,19 @@ def write(data, path):
                         wBitsPerSample, b"data", cksize)
         f.write(b)
         f.write(data)
+
+
+def encode(h):
+    u = -(1 << 15)
+    v = (1 << 15) - 1
+    p = -(1 << 9)
+    q = (1 << 9) - 1
+    return [int(round((x - u) * (q - p) / (v - u) + p)) for x in h]
+
+
+def decode(h):
+    u = -(1 << 15)
+    v = (1 << 15) - 1
+    p = -(1 << 9)
+    q = (1 << 9) - 1
+    return [int((x - p) * (v - u) / (q - p) + u) for x in h]
